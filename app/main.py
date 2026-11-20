@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import threading
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -59,6 +60,7 @@ def parse_dt(s: str) -> datetime:
 
 
 def save_card(count: int, shift: Optional[int], dt: Optional[datetime]) -> dict:
+    t0 = time.perf_counter()
     now = dt or datetime.now()
     shift = shift or get_shift(now)
     if shift not in (1, 2, 3):
@@ -70,7 +72,14 @@ def save_card(count: int, shift: Optional[int], dt: Optional[datetime]) -> dict:
             (count, shift, stamp),
         )
         conn.commit()
-    return {"ok": True, "count": count, "shift": shift, "date_time": stamp}
+    return {
+        "ok": True,
+        "count": count,
+        "shift": shift,
+        "date_time": stamp,
+        "response_time": datetime.now().strftime(FMT),                    # server time when reply was made
+        "process_time_ms": round((time.perf_counter() - t0) * 1000, 2),  # server processing time
+    }
 
 
 @app.post("/api/card")
