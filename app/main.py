@@ -78,7 +78,7 @@ def post_card(d: CardData):
     return save_card(d.count, d.shift, parse_dt(d.date_time) if d.date_time else None)
 
 
-@app.get("/api/card/{count}/{shift}/{date_time}")
+@app.api_route("/api/card/{count}/{shift}/{date_time}", methods=["GET", "POST"])
 def add_card_by_url(count: int, shift: str, date_time: str):
     """
     URL se data: /api/card/25/1/2026-11-17_15:14:00
