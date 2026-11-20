@@ -1,0 +1,24 @@
+[Unit]
+Description=Card Counter API (FastAPI / Uvicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=cardapi
+Group=cardapi
+WorkingDirectory=/opt/card-api/app
+EnvironmentFile=/etc/card-api.env
+# IMPORTANT: keep --workers 1 (app uses one global SQLite connection + a Python lock)
+ExecStart=/opt/card-api/venv/bin/uvicorn main:app --host 0.0.0.0 --port 5005 --workers 1
+Restart=always
+RestartSec=3
+# /var/lib/card-api is created automatically and owned by cardapi
+StateDirectory=card-api
+# Hardening (does not affect other services)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
