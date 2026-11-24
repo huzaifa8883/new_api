@@ -20,10 +20,10 @@ def get_shift(dt: datetime) -> int:
     """Shift 1: 08:00-17:00 | Shift 2: 17:00-24:00 | Shift 3: 00:00-08:00"""
     h = dt.hour
     if 8 <= h < 17:
-        return "A"
+        return 1
     if 17 <= h <= 23:
-        return "B"
-    return "C"
+        return 2
+    return 3
 
 
 
