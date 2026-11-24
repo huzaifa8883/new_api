@@ -64,8 +64,7 @@ def save_card(count: int, shift: Optional[int], dt: Optional[datetime]) -> dict:
     t0 = time.perf_counter()
     now = dt or datetime.now()
     shift = shift or get_shift(now)
-    if shift not in (1, 2, 3):
-        raise HTTPException(400, "shift sirf 1, 2 ya 3 ho sakta hai")
+
     stamp = now.strftime(FMT)
     with lock:
         conn.execute(
